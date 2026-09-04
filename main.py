@@ -16,12 +16,12 @@ app.add_middleware(
 )
 
 # Initialize Gemini Client (uses GEMINI_API_KEY environment variable)
-ai_client = genai.Client(api_key="AQ.Ab8RN6LnvECemAEcrw9q5zZGuwjKu9N2j2EbscxbYDiq1jr8OQ")
+ai_client = genai.Client(api_key=os.getenv("AQ.Ab8RN6LnvECemAEcrw9q5zZGuwjKu9N2j2EbscxbYDiq1jr8OQ"))
 
 def load_data():
     base_path = os.path.dirname(os.path.abspath(__file__))
-    bank_file = os.path.join(base_path, "..", "..", "bank_statements.json")
-    rzp_file = os.path.join(base_path, "..", "..", "razorpay_settlements.json")
+    bank_file = os.path.join(base_path,"bank_statements.json")
+    rzp_file = os.path.join(base_path,"razorpay_settlements.json")
     
     with open(bank_file, "r") as f:
         bank_data = json.load(f)
