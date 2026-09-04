@@ -60,39 +60,24 @@ export default function FinanceControlRoom() {
   }, []);
 
   const handleAiQuery = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!userQuery.trim()) return;
+  e.preventDefault();
+  if (!userQuery.trim()) return;
 
-    setQueryLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/ai-query`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userQuery }),
-      });
-      const data = await res.json();
-      setAiResponse(data.response);
-    } catch (err) {
-      setAiResponse("Failed to communicate with AI engine.");
-    } finally {
-      setQueryLoading(false);
-    }
-  };
-    setQueryLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/ai-query`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userQuery }),
-      });
-      const data = await res.json();
-      setAiResponse(data.response);
-    } catch (err) {
-      setAiResponse("Failed to communicate with AI engine.");
-    } finally {
-      setQueryLoading(false);
-    }
-  };
+  setQueryLoading(true);
+  try {
+    const res = await fetch(`${API_BASE}/api/ai-query`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: userQuery }),
+    });
+    const data = await res.json();
+    setAiResponse(data.response);
+  } catch (err) {
+    setAiResponse("Failed to communicate with AI engine.");
+  } finally {
+    setQueryLoading(false);
+  }
+};
 
   const filteredLogs = activeTab === "exceptions" 
     ? auditLogs.filter(log => log.status !== "MATCHED")
