@@ -38,10 +38,13 @@ export default function FinanceControlRoom() {
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [queryLoading, setQueryLoading] = useState(false);
 
+  // define API_BASE:
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://ai-finance-control-room.onrender.com";
+
   const fetchReconciliationData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/reconcile");
+      const res = await fetch(`${API_BASE}/api/reconcile`);
       const data = await res.json();
       setMetrics(data.metrics);
       setAuditLogs(data.audit_logs);
@@ -62,7 +65,22 @@ export default function FinanceControlRoom() {
 
     setQueryLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/ai-query", {
+      const res = await fetch(`${API_BASE}/api/ai-query`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: userQuery }),
+      });
+      const data = await res.json();
+      setAiResponse(data.response);
+    } catch (err) {
+      setAiResponse("Failed to communicate with AI engine.");
+    } finally {
+      setQueryLoading(false);
+    }
+  };
+    setQueryLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/ai-query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: userQuery }),
