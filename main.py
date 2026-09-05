@@ -113,14 +113,24 @@ def run_reconciliation():
 def process_ai_query(body: PromptQuery):
     gemini_key = os.getenv("GEMINI_API_KEY")
     if not gemini_key:
-        return {"response": "GEMINI_API_KEY environment variable is not configured."}
+        return {"response": "GEMINI_API_KEY environment variable is not configured on Render."}
 
     try:
         ai_client = genai.Client(api_key=gemini_key)
+        
+        # Use exact stable model identifier
         response = ai_client.models.generate_content(
-            model="gemini-3-flash",
+            model="gemini-2.0-flash", 
             contents=f"You are an expert AI Finance Controller for Razorpay Buildathon. Answer this question concisely based on financial reconciliation rules: {body.query}"
         )
         return {"response": response.text}
     except Exception as e:
-        return {"response": f"AI Engine error: {str(e)}"}
+        # Fallback to gemini-1.5-flash if 2.0 fails on specific key regions
+        try:
+            response = ai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=f"You are an expert AI Finance Controller for Razorpay Buildathon. Answer this question concisely: {body.query}"
+            )
+            return {"response": response.text}
+        except Exception as fallback_err:
+            return {"response": f"AI Engine error: {str(fallback_err)}"}
