@@ -15,6 +15,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    ai_client = genai.Client(api_key=GEMINI_API_KEY)
+else:
+    ai_client = None
+
 # Initialize Gemini Client (uses GEMINI_API_KEY environment variable)
 gimini_key = os.getenv("GEMINI_API_KEY")
 ai_client = genai.Client(api_key=gimini_key)
