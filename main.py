@@ -118,7 +118,7 @@ def process_ai_query(body: PromptQuery):
     try:
         ai_client = genai.Client(api_key=gemini_key)
         response = ai_client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.6-flash",
             contents=f"You are an expert AI Finance Controller for Razorpay Buildathon. Answer this question concisely based on financial reconciliation rules: {body.query}"
         )
         return {"response": response.text}
