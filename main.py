@@ -4,6 +4,40 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
+# 2. Root route so base URL doesn't return "Not Found"
+@app.get("/")
+def read_root():
+    return {"status": "AI Finance Engine Online"}
+
+# 3. Data Reconciliation Endpoint
+@app.get("/api/reconcile")
+def run_reconciliation():
+    base_path = os.path.dirname(os.path.abspath(_file_))
+    bank_file = os.path.join(base_path, "bank_statements.json")
+    rzp_file = os.path.join(base_path, "razorpay_settlements.json")
+    
+    with open(bank_file, "r") as f:
+        bank_data = json.load(f)
+    with open(rzp_file, "r") as f:
+        rzp_data = json.load(f)
+        
+    return {"bank": bank_data, "razorpay": rzp_data}
+
+# 4. AI Query Endpoint
+@app.post("/api/ai-query")
+def process_ai_query(payload: dict):
+    user_query = payload.get("query", "")
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    
+    if not gemini_key:
+        return {"response": "GEMINI_API_KEY environment variable is not configured."}
+        
+    client = genai.Client(api_key=gemini_key)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=user_query,
+    )
+    return {"response": response.text}
 
 app = FastAPI(title="AI Finance Reconciliation Agent")
 
