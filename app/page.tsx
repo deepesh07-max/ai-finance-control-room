@@ -39,7 +39,7 @@ export default function FinanceControlRoom() {
   const [queryLoading, setQueryLoading] = useState(false);
 
   // define API_BASE:
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://ai-finance-control-room.onrender.com";
+  const API_BASE = "https://ai-finance-control-room.onrender.com";
 
   const fetchReconciliationData = async () => {
     setLoading(true);
