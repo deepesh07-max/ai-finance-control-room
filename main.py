@@ -16,7 +16,8 @@ app.add_middleware(
 )
 
 # Initialize Gemini Client (uses GEMINI_API_KEY environment variable)
-ai_client = genai.Client(api_key=os.getenv("AQ.Ab8RN6INpDjfXZ5-ZyDaN6OLR4bkIAiy7rxrC6s2_UA1Eml8ow"))
+gimini_key = os.getenv("GEMINI_API_KEY")
+ai_client = genai.Client(api_key=gimini_key)
 
 def load_data():
     base_path = os.path.dirname(os.path.abspath(__file__))
